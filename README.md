@@ -25,7 +25,7 @@ Want to parse int8? No problem!
 numberconverter.EtoiGeneric[int8]("Fifty five") // 55
 ```
 
-Numbers above the given integer's maximum will produce unexpected results-be careful!
+Numbers above the given integer's maximum will produce unexpected results—be careful!
 
 ```
 numberconverter.EtoiGeneric[int8]("Fifty hundred and fifty two million") // 0
