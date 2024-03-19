@@ -7,6 +7,7 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
+// Function Itoe will convert an int64 into an English string. For example, an input of 5 would produce "five". The style of the output is always consistent—lower case, no 'and', and hyphenation of numbers 21 to 99.
 func Itoe(num int64) string {
 	// handle zero and negative cases
 	negative := false
@@ -35,6 +36,7 @@ func Itoe(num int64) string {
 	return strings.Join(words, " ")
 }
 
+// Function ItoeGeneric performs the same function as Itoe but is generic. 
 func ItoeGeneric[T constraints.Signed](num T) string {
 	return Itoe(int64(num))
 }
