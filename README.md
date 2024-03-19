@@ -31,6 +31,10 @@ Numbers above the given integer's maximum will produce unexpected results—be c
 numberconverter.EtoiGeneric[int8]("Fifty hundred and fifty two million") // 0
 ```
 
-## No configuration
+## Zero configuration
 
 No need to pass around an instance of a struct to use the converter. The package provides two simple methods that may be used globally.
+
+## Zero dependency
+
+Nourish your codebase with pure Go goodness.

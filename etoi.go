@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
-
-	"golang.org/x/exp/constraints"
 )
 
 // Etoi (English to Integer) will convert an english language string into an int64. This function may not error on some English syntax errors. It assumes correct English. For example, you can omit 'and'.
@@ -46,7 +44,7 @@ func Etoi(str string) (int64, error) {
 }
 
 // EtoiGeneric also converts an english language string into a signed integer, but is generic. This function uses bare type coercion and may result in funky numbers being returned! If you want to guarantee a conversion, consider the non generic version.
-func EtoiGeneric[T constraints.Signed](str string) (T, error) {
+func EtoiGeneric[T Integer](str string) (T, error) {
 	i, err := Etoi(str)
 	if err != nil {
 		return 0, err
