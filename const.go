@@ -1,18 +1,18 @@
 package numberconverter
 
-var ItoeNumbers = []string{"", " thousand", " million", " billion", " trillion", " quadrillion"}
+var itoeNumbers = []string{"", "thousand", "million", "billion", "trillion", "quadrillion"}
 
-var ItoeUniques = map[int]string{
-	0: "zero",
-	1: "one",
-	2: "two",
-	3: "three",
-	4: "four",
-	5: "five",
-	6: "six",
-	7: "seven",
-	8: "eight",
-	9: "nine",
+var itoeUniques = map[int]string{
+	0:  "zero",
+	1:  "one",
+	2:  "two",
+	3:  "three",
+	4:  "four",
+	5:  "five",
+	6:  "six",
+	7:  "seven",
+	8:  "eight",
+	9:  "nine",
 	10: "ten",
 	11: "eleven",
 	12: "twelve",
@@ -25,7 +25,7 @@ var ItoeUniques = map[int]string{
 	19: "nineteen",
 }
 
-var ItoeTens = map[int]string{
+var itoeTens = map[int]string{
 	2: "twenty",
 	3: "thirty",
 	4: "forty",
@@ -36,7 +36,7 @@ var ItoeTens = map[int]string{
 	9: "ninety",
 }
 
-var EtoiTokens = map[string]int64{
+var etoiTokens = map[string]int64{
 	"zero":        0,
 	"one":         1,
 	"two":         2,

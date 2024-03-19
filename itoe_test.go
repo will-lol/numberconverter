@@ -21,6 +21,15 @@ func TestItoeSimple(t *testing.T) {
 	}
 }
 
+func TestItoeNum(t *testing.T) {
+	var in int64 = 5
+	var want string = "five"
+	val := numberconverter.Itoe(in)
+	if want != val {
+		t.Fatalf("Expected \"%s\" but got \"%s\"", want, val)
+	}
+}
+
 func FuzzItoe(f *testing.F) {
 	f.Fuzz(func(t *testing.T, i int) {
 		out := numberconverter.ItoeGeneric(i)

@@ -96,7 +96,7 @@ func toNums(strs []string) ([]int64, error) {
 }
 
 func convertNum(str string) (int64, error) {
-	i, found := EtoiTokens[str]
+	i, found := etoiTokens[str]
 	if !found {
 		return 0, errors.New(fmt.Sprintf("%s incorrect or unsupported", str))
 	}

@@ -11,6 +11,18 @@ func BenchmarkEtoi(b *testing.B) {
 	}
 }
 
+func TestEtoiGeneric(t *testing.T) {
+	in := "five hundred and fifty two million"
+	var want int8 = 55
+	val, err := numberconverter.EtoiGeneric[int8](in)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want != val {
+		t.Fatalf("Expected %d but got %d", want, val)
+	}
+}
+
 func TestEtoiZero(t *testing.T) {
 	in := "zero"
 	var want int64 = 0

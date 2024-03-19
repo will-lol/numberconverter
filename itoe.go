@@ -9,9 +9,9 @@ import (
 
 func Itoe(num int64) string {
 	// handle zero and negative cases
-	negative := ""
+	negative := false
 	if num < 0 {
-		negative = "negative "
+		negative = true
 		num = num * -1
 	}
 	if num == 0 {
@@ -20,20 +20,26 @@ func Itoe(num int64) string {
 
 	arrs := splitArr(toDigitArr(num))
 
-	output := make([]string, len(arrs), len(arrs))
-
-	for i, arr := range arrs {
-		output[i] = fragmentToString(arr) + ItoeNumbers[len(arrs)-i-1]
+	words := make([]string, 0, len(arrs))
+	if negative {
+		words = append(words, "negative")
 	}
 
-	return negative + strings.Join(output, " ")
+	for i, arr := range arrs {
+		words = append(words, fragmentToStrings(arr)...)
+		if len(arrs)-i-1 > 0 {
+			words = append(words, itoeNumbers[len(arrs)-i-1])
+		}
+	}
+
+	return strings.Join(words, " ")
 }
 
 func ItoeGeneric[T constraints.Signed](num T) string {
 	return Itoe(int64(num))
 }
 
-func fragmentToString(arr []int) string {
+func fragmentToStrings(arr []int) []string {
 	out := make([]string, 0, 3)
 
 	hundreds := 0
@@ -49,12 +55,12 @@ func fragmentToString(arr []int) string {
 	} else if len(arr) == 1 {
 		ones = arr[0]
 	} else {
-		return "zero"
+		return []string{"zero"}
 	}
 
 	// hundreds
 	if hundreds != 0 {
-		out = append(out, ItoeUniques[hundreds]+" hundred")
+		out = append(out, itoeUniques[hundreds]+" hundred")
 	}
 
 	// tens and ones
@@ -64,16 +70,18 @@ func fragmentToString(arr []int) string {
 		if tens == 1 {
 			lessThanTwenty = 10
 		} else {
-			tensAndOnes = append(tensAndOnes, ItoeTens[tens])
+			tensAndOnes = append(tensAndOnes, itoeTens[tens])
 		}
 	}
 	lessThanTwenty += ones
 	if lessThanTwenty != 0 {
-		tensAndOnes = append(tensAndOnes, ItoeUniques[lessThanTwenty])
+		tensAndOnes = append(tensAndOnes, itoeUniques[lessThanTwenty])
 	}
 
-	out = append(out, strings.Join(tensAndOnes, "-"))
-	return strings.Join(out, " ")
+	if len(tensAndOnes) > 0 {
+		out = append(out, strings.Join(tensAndOnes, "-"))
+	}
+	return out
 }
 
 func splitArr(arr []int) [][]int {
