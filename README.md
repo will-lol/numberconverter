@@ -33,4 +33,4 @@ numberconverter.EtoiGeneric[int8]("Fifty hundred and fifty two million") // 0
 
 ## No configuration
 
-No need to pass around an instance of a struct to use the converter. The package provides two simple methods that may be used globally to the same effect.
+No need to pass around an instance of a struct to use the converter. The package provides two simple methods that may be used globally.
