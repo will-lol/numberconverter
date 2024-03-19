@@ -11,8 +11,24 @@ func BenchmarkEtoi(b *testing.B) {
 	}
 }
 
+func FuzzEtoi(f *testing.F) {
+	f.Add(int64(9_223_372_036_554_775_806))
+	f.Add(int64(4))
+	f.Add(int64(2312312))
+	f.Fuzz(func (t *testing.T, i int64) {
+		str := numberconverter.Itoe(i)
+		val, err := numberconverter.Etoi(str)
+		if err != nil {
+			t.Error(err)
+		}
+		if val != i {
+			t.Errorf("Expected %d from converted %s but got %d", i, str, val)
+		}
+	})
+}
+
 func TestEtoiGeneric(t *testing.T) {
-	in := "five hundred and fifty two million"
+	in := "fifty five"
 	var want int8 = 55
 	val, err := numberconverter.EtoiGeneric[int8](in)
 	if err != nil {

@@ -4,9 +4,11 @@ package numberconverter
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
-	"unicode"
 )
+
+var word = regexp.MustCompile(`\w+`)
 
 // Etoi (English to Integer) will convert an english language string into an int64. An input of "five" would return 5. This function may not error on some English syntax errors. It assumes correct English. 
 func Etoi(str string) (int64, error) {
@@ -15,9 +17,8 @@ func Etoi(str string) (int64, error) {
 		return 0, errors.New("Received empty string")
 	}
 
-	words := strings.FieldsFunc(strings.TrimSpace(str), func(r rune) bool {
-		return unicode.IsSpace(r) || r == '-'
-	})
+	str = strings.ToLower(str)
+	words := word.FindAllString(str, -1)
 
 	var processed []string
 	for _, word := range words {
@@ -25,7 +26,7 @@ func Etoi(str string) (int64, error) {
 			if word == "a" {
 				word = "one"
 			}
-			processed = append(processed, strings.Trim(strings.ToLower(word), ","))
+			processed = append(processed, word)
 		}
 	}
 

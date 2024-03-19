@@ -1,6 +1,6 @@
 package numberconverter
 
-var itoeNumbers = []string{"", "thousand", "million", "billion", "trillion", "quadrillion"}
+var itoeNumbers = []string{"", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion"}
 
 var itoeUniques = map[int]string{
 	0:  "zero",
@@ -72,4 +72,5 @@ var etoiTokens = map[string]int64{
 	"billion":     1_000_000_000,
 	"trillion":    1_000_000_000_000,
 	"quadrillion": 1_000_000_000_000_000,
+	"quintillion": 1_000_000_000_000_000_000,
 }
