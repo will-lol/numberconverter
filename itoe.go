@@ -34,7 +34,7 @@ func Itoe(num int64) string {
 	return strings.Join(words, " ")
 }
 
-// Function ItoeGeneric performs the same function as Itoe but is generic. 
+// Function ItoeGeneric performs the same function as Itoe but is generic.
 func ItoeGeneric[T Integer](num T) string {
 	return Itoe(int64(num))
 }
