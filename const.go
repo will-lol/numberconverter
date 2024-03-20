@@ -38,7 +38,6 @@ var itoeTens = map[int]string{
 }
 
 var etoiTokens = map[string]int64{
-	"oh":          0,
 	"zero":        0,
 	"one":         1,
 	"two":         2,
@@ -69,6 +68,7 @@ var etoiTokens = map[string]int64{
 	"eighty":      80,
 	"ninety":      90,
 	"hundred":     100,
+	"oh":          100,
 	"thousand":    1_000,
 	"million":     1_000_000,
 	"billion":     1_000_000_000,
