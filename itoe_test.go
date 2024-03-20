@@ -12,21 +12,17 @@ func BenchmarkItoe(b *testing.B) {
 	}
 }
 
-func TestItoeSimple(t *testing.T) {
-	var in int64 = 21474836473
-	var want string = "twenty-one billion four hundred seventy-four million eight hundred thirty-six thousand four hundred seventy-three"
-	val := numberconverter.Itoe(in)
-	if want != val {
-		t.Fatalf("Expected \"%s\" but got \"%s\"", want, val)
+func TestItoe(t *testing.T) {
+	cases := map[int64]string{
+		21474836473: "twenty-one billion four hundred seventy-four million eight hundred thirty-six thousand four hundred seventy-three",
+		5: "five",
 	}
-}
 
-func TestItoeNum(t *testing.T) {
-	var in int64 = 5
-	var want string = "five"
-	val := numberconverter.Itoe(in)
-	if want != val {
-		t.Fatalf("Expected \"%s\" but got \"%s\"", want, val)
+	for in, out := range cases {
+		val := numberconverter.Itoe(in)
+		if out != val {
+			t.Fatalf("Expected %s but got %s", out, val)
+		}
 	}
 }
 
