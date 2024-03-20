@@ -70,6 +70,10 @@ func recurse(arr []int64, isMultiplying bool) int64 {
 	return arr[i]*recurse(multiply, true) + recurse(add, false)
 }
 
+func imply(arr []int64) []int64 {
+	return []int64{}
+}
+
 func findMaxIndex(arr []int64) int {
 	maxIndex := 0
 	for i, num := range arr {

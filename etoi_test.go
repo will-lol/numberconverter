@@ -56,6 +56,7 @@ func TestEtoi(t *testing.T) {
 		"negative one hundred and fourty five million two hundred thousand two hundred and fourty five": -145_200_245,
 		"hundred million":      100_000_000,
 		"three ten": 30,
+		"oh fourty five": 45,
 	}
 
 	for in, out := range cases {

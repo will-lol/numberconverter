@@ -103,7 +103,7 @@ func splitArr(arr []int) [][]int {
 }
 
 func toDigitArr(num int64) []int {
-	length := getDigitLength(num)
+	length := getDigitLength[int](num)
 	arr := make([]int, length, length)
 
 	prev := math.Inf(1)
@@ -116,10 +116,10 @@ func toDigitArr(num int64) []int {
 	return arr
 }
 
-func getDigitLength(num int64) int {
-	l := 1
+func getDigitLength[T Integer](num int64) T {
+	var l T = 1
 	if num == 0 {
 		return l
 	}
-	return l + int(math.Log10(float64(num)))
+	return l + T(math.Log10(float64(num)))
 }

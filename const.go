@@ -38,6 +38,7 @@ var itoeTens = map[int]string{
 }
 
 var etoiTokens = map[string]int64{
+	"oh":          0,
 	"zero":        0,
 	"one":         1,
 	"two":         2,
