@@ -39,11 +39,15 @@ func TestEtoiGeneric(t *testing.T) {
 	}
 }
 
-func TestEtoiInvalid(t *testing.T) {
-	in := "five five"
-	val, err := numberconverter.Etoi(in)
-	if err == nil {
-		t.Fatalf("Should have errored, instead got %d", val)
+func TestEtoiError(t *testing.T) {
+	cases := []string{
+		"one hundred two hundred thousand",
+	}
+	for _, val := range cases {
+		out, err := numberconverter.Etoi(val)
+		if err == nil {
+			t.Fatalf("Expected err but got %d", out)
+		}
 	}
 }
 
@@ -54,9 +58,18 @@ func TestEtoi(t *testing.T) {
 		"Two-million, four hundred, and five": 2_000_405,
 		"one hundred and fourty five million two hundred thousand two hundred and fourty five":          145_200_245,
 		"negative one hundred and fourty five million two hundred thousand two hundred and fourty five": -145_200_245,
-		"hundred million":      100_000_000,
-		"three ten": 30,
-		"oh fourty five": 45,
+		"hundred million":             100_000_000,
+		"three ten":                   30,
+		"nineteen oh five":            1905,
+		"one two five":                125,
+		"six five four three two one": 654321,
+		"twenty twenty four":          2024,
+		"twenty twenty":               2020,
+		"one hundred two hundred":     100200,
+		"twenty twenty twenty":        202020,
+		"one thousand million":        1_000_000_000,
+		"nineteen thirty five":        1935,
+		"negative twenty twenty":      -2020,
 	}
 
 	for in, out := range cases {
