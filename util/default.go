@@ -1,12 +1,14 @@
-package numberconverter
+package util
 
-import "math"
+import (
+	"math"
+)
 
 type Integer interface {
-	int | int8 | int16 | int32 | int64
+	int8 | int16 | int32 | int64 | int
 }
 
-func insert[T any](a []T, index int, value T) []T {
+func Insert[T any](a []T, index int, value T) []T {
 	if len(a) == index { // nil or empty slice or after last element
 		return append(a, value)
 	}
@@ -15,7 +17,7 @@ func insert[T any](a []T, index int, value T) []T {
 	return a
 }
 
-func getDigitLength[T Integer](num int64) T {
+func GetDigitLength[T Integer](num int64) T {
 	var l T = 1
 	if num == 0 {
 		return l
@@ -23,10 +25,3 @@ func getDigitLength[T Integer](num int64) T {
 	return l + T(math.Log10(float64(num)))
 }
 
-func FindAllStringIndex(s string, n int) (loc [][]int) {
-
-}
-
-func FindStringIndex(s string) (loc []int) {
-
-}

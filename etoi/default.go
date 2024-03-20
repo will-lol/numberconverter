@@ -1,5 +1,4 @@
-// Package numberconverter converts contemporary English language numbers ("negative one million three hundred thousand") into signed integers (-1_300_000), and back.
-package numberconverter
+package etoi
 
 import (
 	"errors"
@@ -8,13 +7,14 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+
+	"github.com/will-lol/numberconverter/util"
 )
 
-// Etoi (English to Integer) will convert an english language string into an int64. An input of "five" would return 5. This function may not error on some English syntax errors. It assumes correct English.
-func Etoi(str string) (int64, error) {
+func Tokenize(str string) ([]int64, error) {
 	// handle empty string case
 	if str == "" {
-		return 0, errors.New("Received empty string")
+		return nil, errors.New("Received empty string")
 	}
 
 	words := strings.Fields(strings.Map(func(r rune) rune {
@@ -34,32 +34,20 @@ func Etoi(str string) (int64, error) {
 		}
 	}
 
-	var negative int64 = 1
-	if processed[0] == "negative" || processed[0] == "minus" {
-		negative = -1
-		processed = processed[1:]
-	}
-
 	nums, err := toNums(processed)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	out, err := recurse(imply(nums), false)
-	if err != nil {
-		return 0, err
-	}
-
-	return negative * out, nil
+	return nums, nil
 }
 
-// EtoiGeneric also converts an english language string into a signed integer, but is generic. This function uses bare type coercion and may result in funky numbers being returned! If you want to guarantee a conversion, consider the non generic version.
-func EtoiGeneric[T Integer](str string) (T, error) {
-	i, err := Etoi(str)
-	if err != nil {
-		return 0, err
+func TokensToInt(arr []int64) (int64, error) {
+	if arr[0] == -1 {
+		val, err := recurse(imply(arr[1:]), false)
+		return -1*val, err
 	}
-	return T(i), nil
+	return recurse(imply(arr), false)
 }
 
 func recurse(arr []int64, isMultiplying bool) (int64, error) {
@@ -94,7 +82,7 @@ func recurse(arr []int64, isMultiplying bool) (int64, error) {
 func imply(arr []int64) []int64 {
 	placeValues := make([]int, len(arr), len(arr))
 	for i, val := range arr {
-		placeValues[i] = getDigitLength[int](val)
+		placeValues[i] = util.GetDigitLength[int](val)
 	}
 
 	m := slices.Max(placeValues)
@@ -108,7 +96,7 @@ func imply(arr []int64) []int64 {
 	for i, val := range implyLocs {
 		pow := int64(math.Pow10(m * (len(implyLocs) - 1 - i)))
 		if pow != 1 {
-			arr = insert(arr, val+i+1, pow)
+			arr = util.Insert(arr, val+i+1, pow)
 		}
 	}
 
