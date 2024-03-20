@@ -5,11 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"regexp"
+	"slices"
 	"strings"
+	"unicode"
 )
-
-var word = regexp.MustCompile(`\w+`)
 
 // Etoi (English to Integer) will convert an english language string into an int64. An input of "five" would return 5. This function may not error on some English syntax errors. It assumes correct English.
 func Etoi(str string) (int64, error) {
@@ -18,8 +17,12 @@ func Etoi(str string) (int64, error) {
 		return 0, errors.New("Received empty string")
 	}
 
-	str = strings.ToLower(str)
-	words := word.FindAllString(str, -1)
+	words := strings.Fields(strings.Map(func(r rune) rune {
+		if !unicode.IsLetter(r) {
+			return 32
+		}
+		return r
+	}, strings.ToLower(str)))
 
 	var processed []string
 	for _, word := range words {
@@ -42,7 +45,12 @@ func Etoi(str string) (int64, error) {
 		return 0, err
 	}
 
-	return negative * recurse(nums, false), nil
+	out, err := recurse(imply(nums), false)
+	if err != nil {
+		return 0, err
+	}
+
+	return negative * out, nil
 }
 
 // EtoiGeneric also converts an english language string into a signed integer, but is generic. This function uses bare type coercion and may result in funky numbers being returned! If you want to guarantee a conversion, consider the non generic version.
@@ -54,48 +62,74 @@ func EtoiGeneric[T Integer](str string) (T, error) {
 	return T(i), nil
 }
 
-func recurse(arr []int64, isMultiplying bool) int64 {
+func recurse(arr []int64, isMultiplying bool) (int64, error) {
 	if len(arr) == 0 {
 		if isMultiplying {
-			return 1
+			return 1, nil
 		} else {
-			return 0
+			return 0, nil
 		}
 	}
 	if len(arr) == 1 {
-		return arr[0]
+		return arr[0], nil
 	}
-	i := findMaxIndex(arr)
+	i, err := findMaxIndex(arr)
+	if err != nil {
+		return 0, err
+	}
 	multiply := arr[0:i]
 	add := arr[i+1:]
-	return arr[i]*recurse(multiply, true) + recurse(add, false)
+
+	multiplicand, err := recurse(multiply, true)
+	if err != nil {
+		return 0, err
+	}
+	addend, err := recurse(add, false)
+	if err != nil {
+		return 0, err
+	}
+	return arr[i]*multiplicand + addend, nil
 }
 
 func imply(arr []int64) []int64 {
 	placeValues := make([]int, len(arr), len(arr))
-	implyLocs := make([]int, 0, len(arr) / 2)
 	for i, val := range arr {
 		placeValues[i] = getDigitLength[int](val)
-		if i > 0 && placeValues[i] == placeValues[i-1] {
+	}
+
+	m := slices.Max(placeValues)
+	implyLocs := make([]int, 0, len(arr)/2)
+	for i, val := range placeValues {
+		if val == m {
 			implyLocs = append(implyLocs, i)
 		}
 	}
 
 	for i, val := range implyLocs {
-		arr = insert(arr, val + i, int64(math.Pow10(placeValues[val] + len(implyLocs) - 1 - i)))
+		pow := int64(math.Pow10(m * (len(implyLocs) - 1 - i)))
+		if pow != 1 {
+			arr = insert(arr, val+i+1, pow)
+		}
 	}
 
 	return arr
 }
 
-func findMaxIndex(arr []int64) int {
+func findMaxIndex(arr []int64) (int, error) {
 	maxIndex := 0
+	flag := false
 	for i, num := range arr {
 		if num > arr[maxIndex] {
 			maxIndex = i
+			flag = false
+		} else if num == arr[maxIndex] && i != maxIndex {
+			flag = true
 		}
 	}
-	return maxIndex
+	if flag {
+		return 0, errors.New("Nested duplicates unsupported i.e. 'one hundred two hundred thousand'")
+	}
+	return maxIndex, nil
 }
 
 func toNums(strs []string) ([]int64, error) {
