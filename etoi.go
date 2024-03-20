@@ -4,6 +4,7 @@ package numberconverter
 import (
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"strings"
 )
@@ -71,7 +72,20 @@ func recurse(arr []int64, isMultiplying bool) int64 {
 }
 
 func imply(arr []int64) []int64 {
-	return []int64{}
+	placeValues := make([]int, len(arr), len(arr))
+	implyLocs := make([]int, 0, len(arr) / 2)
+	for i, val := range arr {
+		placeValues[i] = getDigitLength[int](val)
+		if i > 0 && placeValues[i] == placeValues[i-1] {
+			implyLocs = append(implyLocs, i)
+		}
+	}
+
+	for i, val := range implyLocs {
+		arr = insert(arr, val + i, int64(math.Pow10(placeValues[val] + len(implyLocs) - 1 - i)))
+	}
+
+	return arr
 }
 
 func findMaxIndex(arr []int64) int {

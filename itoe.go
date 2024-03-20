@@ -116,10 +116,3 @@ func toDigitArr(num int64) []int {
 	return arr
 }
 
-func getDigitLength[T Integer](num int64) T {
-	var l T = 1
-	if num == 0 {
-		return l
-	}
-	return l + T(math.Log10(float64(num)))
-}
