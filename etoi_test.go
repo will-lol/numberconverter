@@ -15,7 +15,7 @@ func FuzzEtoi(f *testing.F) {
 	f.Add(int64(9_223_372_036_554_775_806))
 	f.Add(int64(4))
 	f.Add(int64(2312312))
-	f.Fuzz(func (t *testing.T, i int64) {
+	f.Fuzz(func(t *testing.T, i int64) {
 		str := numberconverter.Itoe(i)
 		val, err := numberconverter.Etoi(str)
 		if err != nil {
@@ -39,62 +39,32 @@ func TestEtoiGeneric(t *testing.T) {
 	}
 }
 
-func TestEtoiZero(t *testing.T) {
-	in := "zero"
-	var want int64 = 0
+func TestEtoiInvalid(t *testing.T) {
+	in := "five five"
 	val, err := numberconverter.Etoi(in)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if want != val {
-		t.Fatalf("Expected %d but got %d", want, val)
+	if err == nil {
+		t.Fatalf("Should have errored, instead got %d", val)
 	}
 }
 
-func TestEtoiSimple(t *testing.T) {
-	in := "one hundred and twenty three"
-	var want int64 = 123
-	val, err := numberconverter.Etoi(in)
-	if err != nil {
-		t.Fatal(err)
+func TestEtoi(t *testing.T) {
+	cases := map[string]int64{
+		"zero":                                0,
+		"one hundred and twenty three":        123,
+		"Two-million, four hundred, and five": 2_000_405,
+		"one hundred and fourty five million two hundred thousand two hundred and fourty five":          145_200_245,
+		"negative one hundred and fourty five million two hundred thousand two hundred and fourty five": -145_200_245,
+		"hundred million":      100_000_000,
+		"three ten": 30,
 	}
-	if want != val {
-		t.Fatalf("Expected %d but got %d", want, val)
-	}
-}
 
-func TestEtoiGaps(t *testing.T) {
-	in := "Two-million, four hundred, and five"
-	var want int64 = 2_000_405
-	val, err := numberconverter.Etoi(in)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if want != val {
-		t.Fatalf("Expected %d but got %d", want, val)
-	}
-}
-
-func TestEtoiHarder(t *testing.T) {
-	in := "one hundred and fourty five million two hundred thousand two hundred and fourty five"
-	var want int64 = 145_200_245
-	val, err := numberconverter.Etoi(in)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if want != val {
-		t.Fatalf("Expected %d but got %d", want, val)
-	}
-}
-
-func TestEtoiNegative(t *testing.T) {
-	in := "negative one hundred and fourty five million two hundred thousand two hundred and fourty five"
-	var want int64 = -145_200_245
-	val, err := numberconverter.Etoi(in)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if want != val {
-		t.Fatalf("Expected %d but got %d", want, val)
+	for in, out := range cases {
+		val, err := numberconverter.Etoi(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if out != val {
+			t.Fatalf("Expected %d but got %d", out, val)
+		}
 	}
 }
