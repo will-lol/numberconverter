@@ -26,6 +26,7 @@ var itoeUniques = map[int]string{
 }
 
 var itoeTens = map[int]string{
+	1: "ten",
 	2: "twenty",
 	3: "thirty",
 	4: "forty",
