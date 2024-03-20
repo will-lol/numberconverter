@@ -22,3 +22,11 @@ func getDigitLength[T Integer](num int64) T {
 	}
 	return l + T(math.Log10(float64(num)))
 }
+
+func FindAllStringIndex(s string, n int) (loc [][]int) {
+
+}
+
+func FindStringIndex(s string) (loc []int) {
+
+}
