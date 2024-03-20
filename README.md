@@ -14,6 +14,8 @@ It doesn't matter how you write your English numbers, they should parse in most 
 
 ```go
 numberconverter.Etoi("Three hundred and forty two million") // 342_000_000
+numberconverter.Etoi("nineteen thirty six") // 1936
+numberconverter.Etoi("one hundred two hundred") // 100200
 numberconverter.Etoi("three hundred, fourty two million") // 342_000_000
 ```
 
