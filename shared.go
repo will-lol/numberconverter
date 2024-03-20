@@ -7,12 +7,12 @@ type Integer interface {
 }
 
 func insert[T any](a []T, index int, value T) []T {
-    if len(a) == index { // nil or empty slice or after last element
-        return append(a, value)
-    }
-    a = append(a[:index+1], a[index:]...) // index < len(a)
-    a[index] = value
-    return a
+	if len(a) == index { // nil or empty slice or after last element
+		return append(a, value)
+	}
+	a = append(a[:index+1], a[index:]...) // index < len(a)
+	a[index] = value
+	return a
 }
 
 func getDigitLength[T Integer](num int64) T {

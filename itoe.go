@@ -115,4 +115,3 @@ func toDigitArr(num int64) []int {
 
 	return arr
 }
-
