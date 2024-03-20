@@ -10,7 +10,7 @@ import (
 
 var word = regexp.MustCompile(`\w+`)
 
-// Etoi (English to Integer) will convert an english language string into an int64. An input of "five" would return 5. This function may not error on some English syntax errors. It assumes correct English. 
+// Etoi (English to Integer) will convert an english language string into an int64. An input of "five" would return 5. This function may not error on some English syntax errors. It assumes correct English.
 func Etoi(str string) (int64, error) {
 	// handle empty string case
 	if str == "" {
