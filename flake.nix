@@ -18,7 +18,7 @@
 					};
 					# defaultPackage = example;
 					devShell = pkgs.mkShell {
-						packages = with pkgs; [ go gopls gore ];
+						packages = with pkgs; [ go gopls gore graphviz ];
 						shellHook = ''
 						'';
 					};
