@@ -5,42 +5,9 @@ import (
 	"fmt"
 	"math"
 	"slices"
-	"strings"
-	"unicode"
 
 	"github.com/will-lol/numberconverter/util"
 )
-
-func Tokenize(str string) ([]int64, error) {
-	// handle empty string case
-	if str == "" {
-		return nil, errors.New("Received empty string")
-	}
-
-	words := strings.Fields(strings.Map(func(r rune) rune {
-		if !unicode.IsLetter(r) {
-			return 32
-		}
-		return r
-	}, strings.ToLower(str)))
-
-	var processed []string
-	for _, word := range words {
-		if word != "and" {
-			if word == "a" {
-				word = "one"
-			}
-			processed = append(processed, word)
-		}
-	}
-
-	nums, err := toNums(processed)
-	if err != nil {
-		return nil, err
-	}
-
-	return nums, nil
-}
 
 func TokensToInt(arr []int64) (int64, error) {
 	if arr[0] == -1 {

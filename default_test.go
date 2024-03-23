@@ -7,7 +7,7 @@ import (
 
 func BenchmarkEtoi(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		numberconverter.Etoi("one hundred and fourty five million two hundred thousand two hundred and fourty five")
+		numberconverter.EtoiString("one hundred and fourty five million two hundred thousand two hundred and fourty five")
 	}
 }
 
@@ -17,7 +17,7 @@ func FuzzEtoi(f *testing.F) {
 	f.Add(int64(2312312))
 	f.Fuzz(func(t *testing.T, i int64) {
 		str := numberconverter.Itoe(i)
-		val, err := numberconverter.Etoi(str)
+		val, err := numberconverter.EtoiString(str)
 		if err != nil {
 			t.Error(err)
 		}
@@ -30,7 +30,7 @@ func FuzzEtoi(f *testing.F) {
 func TestEtoiGeneric(t *testing.T) {
 	in := "fifty five"
 	var want int8 = 55
-	val, err := numberconverter.EtoiGeneric[int8](in)
+	val, err := numberconverter.EtoiStringGeneric[int8](in)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,7 +44,7 @@ func TestEtoiError(t *testing.T) {
 		"one hundred two hundred thousand",
 	}
 	for _, val := range cases {
-		out, err := numberconverter.Etoi(val)
+		out, err := numberconverter.EtoiString(val)
 		if err == nil {
 			t.Fatalf("Expected err but got %d", out)
 		}
@@ -54,7 +54,7 @@ func TestEtoiError(t *testing.T) {
 func TestEtoi(t *testing.T) {
 	cases := map[string]int64{
 		"zero":                                0,
-		"one hundred and twenty three":        123,
+		"my dog has one hundred and twenty three bones":        123,
 		"Two-million, four hundred, and five": 2_000_405,
 		"one hundred and fourty five million two hundred thousand two hundred and fourty five":          145_200_245,
 		"negative one hundred and fourty five million two hundred thousand two hundred and fourty five": -145_200_245,
@@ -73,7 +73,7 @@ func TestEtoi(t *testing.T) {
 	}
 
 	for in, out := range cases {
-		val, err := numberconverter.Etoi(in)
+		val, err := numberconverter.EtoiString(in)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -106,7 +106,7 @@ func TestItoe(t *testing.T) {
 func FuzzItoe(f *testing.F) {
 	f.Fuzz(func(t *testing.T, i int) {
 		out := numberconverter.ItoeGeneric(i)
-		res, err := numberconverter.EtoiGeneric[int](out)
+		res, err := numberconverter.EtoiStringGeneric[int](out)
 		if err != nil {
 			t.Error(err.Error(), "input", i, "got", out)
 		}
