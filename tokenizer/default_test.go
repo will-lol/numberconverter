@@ -1,13 +1,19 @@
-package tokenizer
+package tokenizer_test
 
 import (
+	"fmt"
 	"testing"
 
-	"github.com/k0kubun/pp/v3"
+	"github.com/will-lol/numberconverter/tokenizer"
 )
 
 func TestMain(t *testing.T) {
-	hashes := map[string]int{}
-
-	pp.Println(hashes)
+	tokenize := tokenizer.NewTokenizer(tokenizer.NewInputString("Between three and five dogs live in my house"))
+	for {
+		token, err := tokenize.Next()
+		if err != nil {
+			break
+		}
+		fmt.Println(token)
+	}
 }

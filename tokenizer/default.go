@@ -1,8 +1,6 @@
 package tokenizer
 
 import (
-	"bufio"
-	"io"
 	"math"
 	"unicode"
 )
@@ -139,40 +137,65 @@ var Tokens = map[int]TokenType{
 func hash(buf []rune) int {
 	h := 0
 	for _, byte := range buf {
-		h = 37*h + int(unicode.ToLower(byte))
+		if byte != 0 {
+			h = 37*h + int(unicode.ToLower(byte))
+		}
 	}
 	return h
 }
 
 type Tokenizer interface {
 	Next() (TokenType, error)
+	Position() []int
+	Set(pos int)
 }
 
 type tokenizer struct {
-	Reader *bufio.Reader
+	Input Input
+	Pos []int
 }
 
-func NewTokenizer(reader io.Reader) Tokenizer {
+func NewTokenizer(input Input) Tokenizer {
 	return &tokenizer{
-		Reader: bufio.NewReader(reader),
+		Input: input,
+		Pos: []int{0, 0},
 	}
 }
 
-func peekRune(reader *bufio.Reader) (r rune, size int, err error) {
-	r, size, err = reader.ReadRune()
-	reader.UnreadRune()
-	return r, size, err
+// Returns the position of the last token
+func (t *tokenizer) Position() ([]int) {
+	return t.Pos
+}
+
+var significant = []*unicode.RangeTable{unicode.Letter, unicode.Sentence_Terminal}
+
+func (t *tokenizer) Set(pos int) {
+	t.Input.Set(pos)
 }
 
 func (t *tokenizer) Next() (TokenType, error) {
-	val, _, err := peekRune(t.Reader)
+	val := t.Input.Peek(0)
+	if err := t.Input.Error(); err != nil {
+		return 0, err
+	}
+	if !unicode.IsOneOf(significant, val) {
+		t.consumeInsignificant()
+	}
+
+	val = t.Input.Peek(0)
+	if unicode.Is(unicode.Sentence_Terminal, val) {
+		t.Input.Advance(1)
+		return DelimToken, nil
+	}
+
+	t.Pos[0] = t.Input.Position()
+	word, err := t.consumeWord()
+	t.Pos[1] = t.Input.Position()
+
 	if err != nil {
 		return 0, err
 	}
-	if !unicode.IsLetter(val) {
-		t.consumeDelims()
-	}
-	word, err := t.consumeWord()
+
 	if word[len(word)-1] == 's' {
 		word = word[:len(word)-1]
 	}
@@ -183,32 +206,28 @@ func (t *tokenizer) Next() (TokenType, error) {
 	return token, nil
 }
 
-func (t *tokenizer) consumeDelims() error {
+func (t *tokenizer) consumeInsignificant() error {
 	for {
-		r, _, err := t.Reader.ReadRune()
-		if err != nil {
-			return err
-		}
-		if unicode.IsLetter(r) {
-			t.Reader.UnreadRune()
+		r := t.Input.Peek(0)
+		if unicode.IsOneOf(significant, r) || t.Input.Error() != nil {
 			break
 		}
+		t.Input.Advance(1)
 	}
-	return nil
+	return t.Input.Error()
 }
 
 func (t *tokenizer) consumeWord() ([]rune, error) {
-	word := make([]rune, 0, 10)
-	for {
-		r, _, err := t.Reader.ReadRune()
-		if err != nil {
-			return word, err
-		}
-		if unicode.IsLetter(r) {
-			word = append(word, r)
-		} else if unicode.IsOneOf([]*unicode.RangeTable{unicode.Space, unicode.Dash}, r) {
-			t.Reader.UnreadRune()
-			return word, nil
+	s := t.Input.ReadSliceFunc(func(r rune) bool {
+		return unicode.IsLetter(r)
+	})
+	if err := t.Input.Error(); err != nil {
+		return nil, err
+	}
+	for i := range s {
+		if unicode.IsOneOf([]*unicode.RangeTable{unicode.Space, unicode.Dash}, s[i]) {
+			s[i] = 0
 		}
 	}
+	return s, nil
 }
