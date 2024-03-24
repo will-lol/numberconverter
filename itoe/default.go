@@ -1,25 +1,17 @@
-package numberconverter
+package itoe
 
 import (
 	"math"
 	"strings"
+
+	"github.com/will-lol/numberconverter/util"
 )
 
-// Itoe (Integer to English) will convert an int64 into an English language string. For example, an input of 5 would produce "five". The style of the output is always consistent—lower case, no 'and', and hyphenation of numbers 21 to 99.
-func Itoe(num int64) string {
-	// handle zero and negative cases
-	negative := false
-	if num < 0 {
-		negative = true
-		num = num * -1
-	}
-	if num == 0 {
-		return "zero"
-	}
-
-	arrs := splitArr(toDigitArr(num))
+func DigitArrToString(digits []int, negative bool) string {
+	arrs := splitArr(digits)
 
 	words := make([]string, 0, len(arrs))
+
 	if negative {
 		words = append(words, "negative")
 	}
@@ -32,11 +24,6 @@ func Itoe(num int64) string {
 	}
 
 	return strings.Join(words, " ")
-}
-
-// Function ItoeGeneric performs the same function as Itoe but is generic.
-func ItoeGeneric[T Integer](num T) string {
-	return Itoe(int64(num))
 }
 
 func fragmentToStrings(arr []int) []string {
@@ -102,8 +89,8 @@ func splitArr(arr []int) [][]int {
 	return out
 }
 
-func toDigitArr(num int64) []int {
-	length := getDigitLength[int](num)
+func ToDigitArr(num int64) []int {
+	length := util.GetDigitLength[int](num)
 	arr := make([]int, length, length)
 
 	prev := math.Inf(1)
