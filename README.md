@@ -2,9 +2,9 @@
 
 ⚠️ numberconverter is currently pre-release. The API is unstable and some methods may not be correct. 
 
----
-
 [![Go Reference](https://pkg.go.dev/badge/github.com/will-lol/numberconverter.svg)](https://pkg.go.dev/github.com/will-lol/numberconverter)
+
+---
 
 numberconverter provides two simple methods for converting between English and Integers in Go.
 
