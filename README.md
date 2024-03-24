@@ -19,6 +19,15 @@ numberconverter.Etoi("one hundred two hundred") // 100200
 numberconverter.Etoi("three hundred, fourty two million") // 342_000_000
 ```
 
+## Batteries included
+
+Methods for finding and replacing English numbers in your strings are provided.
+
+```go 
+numberconverter.FindAllEnglishNumber("Fifty five dogs. Three hundred and twenty three geese.") // {"Fifty five", "Three hundred and twenty three"}
+numberconverter.EtoiReplaceAll("If we talk about dogs, I have three. Two of them live in a kennel") // "If we talk about dogs, I have 3. 2 of them live in a kennel"
+```
+
 ## Generic
 
 Want to parse int8? No problem!
